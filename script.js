@@ -87,8 +87,8 @@ function addToCart(id) {
   if (existing) existing.qty += 1;
   else cart.push({ id, qty: 1 });
 
-  // GA4 EVENT: uncomment once gtag.js is installed (Week 3)
-  // gtag('event', 'add_to_cart', { currency: 'USD', value: findProduct(id).price, items: [{ item_id: id, item_name: findProduct(id).name }] });
+  
+  gtag('event', 'add_to_cart', { currency: 'USD', value: findProduct(id).price, items: [{ item_id: id, item_name: findProduct(id).name }] });
 
   renderCart();
   showToast(`${findProduct(id).name} added to cart`);
@@ -178,7 +178,7 @@ document.getElementById("checkoutBtn").addEventListener("click", () => {
   checkoutSuccess.classList.add("hidden");
 
   // GA4 EVENT: uncomment once gtag.js is installed (Week 3)
-  // gtag('event', 'begin_checkout', { currency: 'USD', value: cartTotal() });
+  gtag('event', 'begin_checkout', { currency: 'USD', value: cartTotal() });
 });
 
 function closeCheckout() {
@@ -203,8 +203,8 @@ document.getElementById("orderForm").addEventListener("submit", (e) => {
     document.getElementById("confirmEmail").textContent = email;
 
     // GA4 EVENT: uncomment once gtag.js is installed (Week 3)
-    // gtag('event', 'purchase', { transaction_id: orderId, currency: 'USD', value: cartTotal(),
-    //   items: cart.map(i => ({ item_id: i.id, item_name: findProduct(i.id).name, quantity: i.qty })) });
+    gtag('event', 'purchase', { transaction_id: orderId, currency: 'USD', value: cartTotal(),
+       items: cart.map(i => ({ item_id: i.id, item_name: findProduct(i.id).name, quantity: i.qty })) });
 
     cart = [];
     renderCart();
@@ -243,4 +243,4 @@ renderProducts();
 renderCart();
 
 // GA4 EVENT (page/product view): uncomment once gtag.js is installed (Week 3)
-// gtag('event', 'view_item_list', { item_list_name: 'Catalog' });
+gtag('event', 'view_item_list', { item_list_name: 'Catalog' });
