@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CircuitCraft — Everyday Tech, Well Made</title>
+<meta name="description" content="CircuitCraft — a demo e-commerce store for tech accessories. Academic lab project.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#top" class="logo">
+      <span class="logo-mark">◈</span> CircuitCraft
+    </a>
+    <nav class="main-nav">
+      <a href="#shop">Shop</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <button class="cart-btn" id="cartToggle" aria-label="Open cart">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">SPEC-01 — NEW ARRIVAL</p>
+      <h1>Gear that earns<br>its place on your desk.</h1>
+      <p class="hero-sub">Eight essentials, tested for the way you actually work — from the commute to the last tab you close at night.</p>
+      <a href="#shop" class="btn btn-primary">Browse the catalog</a>
+    </div>
+    <div class="spec-card">
+      <div class="spec-card-header">
+        <span>FEATURED</span>
+        <span>NC-07</span>
+      </div>
+      <div class="spec-card-icon" id="heroIcon"></div>
+      <h3>Aria ANC Earbuds</h3>
+      <ul class="spec-list">
+        <li><span>Battery</span><span>32 hrs</span></li>
+        <li><span>ANC depth</span><span>-38 dB</span></li>
+        <li><span>Weight</span><span>4.2 g / bud</span></li>
+      </ul>
+      <div class="spec-price">$79.00</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCT GRID ===== -->
+<section class="shop" id="shop">
+  <div class="section-heading">
+    <h2>The Catalog</h2>
+    <p>Every item below is wired into the cart and checkout flow — add a few and try the full flow.</p>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- ===== HOW IT WORKS (mirrors the lab's funnel: Home > Product > Cart > Checkout) ===== -->
+<section class="how-it-works" id="how-it-works">
+  <div class="section-heading">
+    <h2>How checkout works</h2>
+    <p>This mirrors the funnel this lab tracks in GA4: Home → Product → Cart → Checkout.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><span class="step-num">01</span><h4>Browse</h4><p>Explore the catalog and open a product's spec card.</p></div>
+    <div class="step"><span class="step-num">02</span><h4>Add to cart</h4><p>Items are held in the cart drawer with live subtotal.</p></div>
+    <div class="step"><span class="step-num">03</span><h4>Checkout</h4><p>Enter shipping details and a sandbox card.</p></div>
+    <div class="step"><span class="step-num">04</span><h4>Confirmation</h4><p>A simulated order is placed — no real charge occurs.</p></div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="section-heading">
+    <h2>Good to know</h2>
+  </div>
+  <div class="faq-grid">
+    <div class="faq-item"><h4>Is this a real store?</h4><p>No — CircuitCraft is a sandbox e-commerce build for a digital marketing &amp; analytics lab. Payments are simulated and no data is transmitted anywhere.</p></div>
+    <div class="faq-item"><h4>Can I connect GA4?</h4><p>Yes — drop your Measurement ID into <code>script.js</code> where marked, and this site will report pageviews, add_to_cart, and purchase events.</p></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>CircuitCraft — a sandbox project built for lab work in E-Commerce &amp; Internet Marketing. No real payments are processed.</p>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+  <div class="cart-drawer-header">
+    <h3>Your Cart</h3>
+    <button class="icon-btn" id="cartClose" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cartSubtotal">$0.00</span>
+    </div>
+    <button class="btn btn-primary btn-full" id="checkoutBtn">Checkout</button>
+  </div>
+</aside>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div class="modal-overlay" id="checkoutOverlay">
+  <div class="modal" id="checkoutModal">
+    <button class="icon-btn modal-close" id="checkoutClose" aria-label="Close">✕</button>
+
+    <!-- Step 1: shipping + payment -->
+    <div id="checkoutForm">
+      <p class="eyebrow">CHECKOUT</p>
+      <h3>Shipping &amp; Payment</h3>
+
+      <form id="orderForm">
+        <fieldset>
+          <legend>Shipping details</legend>
+          <label>Full name<input type="text" name="fullName" required placeholder="Jordan Rai"></label>
+          <label>Email<input type="email" name="email" required placeholder="jordan@example.com"></label>
+          <label>Address<input type="text" name="address" required placeholder="221B Baker Street"></label>
+          <div class="form-row">
+            <label>City<input type="text" name="city" required placeholder="Kathmandu"></label>
+            <label>Postal code<input type="text" name="postal" required placeholder="44600"></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment <span class="sandbox-tag">SandboxPay · Test Mode</span></legend>
+          <label>Card number<input type="text" name="cardNumber" required placeholder="4242 4242 4242 4242" maxlength="19"></label>
+          <div class="form-row">
+            <label>Expiry<input type="text" name="expiry" required placeholder="MM/YY" maxlength="5"></label>
+            <label>CVV<input type="text" name="cvv" required placeholder="123" maxlength="3"></label>
+          </div>
+          <p class="sandbox-note">No real payment is processed. Any card number will work in this sandbox.</p>
+        </fieldset>
+
+        <div class="order-total-row">
+          <span>Total due</span>
+          <span id="checkoutTotal">$0.00</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="placeOrderBtn">Place order</button>
+      </form>
+    </div>
+
+    <!-- Step 2: processing -->
+    <div id="checkoutProcessing" class="hidden">
+      <div class="spinner"></div>
+      <p class="processing-text">Contacting SandboxPay…</p>
+    </div>
+
+    <!-- Step 3: confirmation -->
+    <div id="checkoutSuccess" class="hidden">
+      <div class="success-icon">✓</div>
+      <h3>Order confirmed</h3>
+      <p class="order-id">Order <span id="orderId"></span></p>
+      <p class="success-copy">A confirmation would normally be emailed to <span id="confirmEmail"></span>. This is a simulated transaction for lab purposes.</p>
+      <button class="btn btn-primary btn-full" id="continueShoppingBtn">Continue shopping</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="./script.js"></script>
+</body>
+</html>
